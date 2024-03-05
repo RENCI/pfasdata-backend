@@ -11,14 +11,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-from six.moves.urllib import request  # auth0
-
-from cryptography.x509 import load_pem_x509_certificate  # auth0
-from cryptography.hazmat.backends import default_backend  # auth0
-
-# from dotenv import load_dotenv
-
-# load_dotenv('pfasdata/.env')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -83,13 +75,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# new
-try:
-    # from .secrets.secrets import *
-    from .secrets import secrets
-except ImportError:
-    pass
-
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -123,26 +108,6 @@ DATABASES = {
         'PORT': os.environ.get("SQL_PORT", "5434"),
     }
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
-
-"""
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # auth0
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # auth0
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # auth0
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # auth0
-    },
-]
-"""
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
