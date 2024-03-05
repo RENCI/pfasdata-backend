@@ -13,11 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
-from django.urls import path
+from django.urls import re_path as url
+from django.urls import path, include
 from rest_framework import routers
 from . import views
-#from .models import pfas_hot_spot, pfas_dust_water, ncserum, ahhs_water_data
 
 # Set URL for gauge geometry Django views
 router = routers.DefaultRouter()
