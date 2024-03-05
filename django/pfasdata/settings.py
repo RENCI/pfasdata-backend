@@ -11,9 +11,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-
-import textwrap
-import json  # auth0
 from six.moves.urllib import request  # auth0
 
 from cryptography.x509 import load_pem_x509_certificate  # auth0
@@ -30,8 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '(b7sngj^x-i_)3gtsh(wr+-)wl*)!ac52+%w#*bx%@8*15p)=e'
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = '(b7sngj^x-i_)3gtsh(wr+-)wl*)!ac52+%w#*bx%@8*15p)=e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.getenv('DEBUG', True)
@@ -131,6 +127,7 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
+"""
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # auth0
@@ -145,6 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # auth0
     },
 ]
+"""
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -167,27 +165,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # new
 
 MEDIA_URL = '/mediafiles/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
-
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",  # check
-    "django.contrib.auth.backends.RemoteUserBackend",  # check
-    "allauth.account.auth_backends.AuthenticationBackend",  # check
-)
-
-AUTH0_DOMAIN = secrets.AUTH0_DOMAIN  # auth0
-API_IDENTIFIER = secrets.API_IDENTIFIER  # auth0
-PUBLIC_KEY = None  # auth0
-JWT_ISSUER = None  # auth0
-
-# If AUTH0_DOMAIN is defined, load the jwks.json
-if AUTH0_DOMAIN:  # auth0
-    jsonurl = request.urlopen('https://' + AUTH0_DOMAIN + '/.well-known/jwks.json')
-    jwks = json.loads(jsonurl.read())
-    cert = '-----BEGIN CERTIFICATE-----\n' + jwks['keys'][0]['x5c'][0] + '\n-----END CERTIFICATE-----'
-    certificate = load_pem_x509_certificate(cert.encode('utf-8'), default_backend())
-    PUBLIC_KEY = certificate.public_key()
-    JWT_ISSUER = 'https://' + AUTH0_DOMAIN + '/'
-
 
 SITE_ID = 1
 
