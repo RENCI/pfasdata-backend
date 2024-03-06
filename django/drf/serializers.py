@@ -1,7 +1,7 @@
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from rest_framework.serializers import ModelSerializer
 from .models import pfas_hot_spot, pfas_dust_water, ahhs_dust_data, ahhs_water_data, ncserum, pfas_in_tapwater_usgs
-#from drf_queryfields import QueryFieldsMixin
+from drf_queryfields import QueryFieldsMixin
 
 # Serializer, with GeoFeatureModelSerializer, for tables for the gauge_station_source_data model view.
 # GeoFeatureModelSerializer enables spatial searches.
@@ -19,7 +19,7 @@ class pfas_dust_water_Serializer(GeoFeatureModelSerializer):
         id_field = 'id'
         fields = ('id','sample','compound','concentration_ng_per_g','city','state','medium','longitude','latitude')
 
-class ahhs_dust_data_Serializer(ModelSerializer):
+class ahhs_dust_data_Serializer(QueryFieldsMixin, ModelSerializer):
     class Meta:
         model = ahhs_dust_data
         id_field = 'id'
@@ -34,7 +34,7 @@ class ahhs_dust_data_Serializer(ModelSerializer):
                   'pfhpa_dl', 'pfhpa_flags', 'pfhxs_concentration', 'pfhxs_mrl', 'pfhxs_dl', 'pfhxs_flags', 'pfda_concentration', 
                   'pfda_mrl', 'pfda_dl', 'pfda_flags')
 
-class ahhs_water_data_Serializer(ModelSerializer):
+class ahhs_water_data_Serializer(QueryFieldsMixin, ModelSerializer):
     class Meta:
         model = ahhs_water_data
         id_field = 'id'
@@ -47,7 +47,7 @@ class ahhs_water_data_Serializer(ModelSerializer):
                   'pfhpa_mrl', 'pfhpa_dl', 'pfhpa_flags', 'pfoa_concentration', 'pfoa_mrl', 'pfoa_dl', 'pfoa_flags', 
                   'pfns_concentration', 'pfns_mrl', 'pfns_dl', 'pfns_flags')
 
-class ncserum_Serializer(ModelSerializer):
+class ncserum_Serializer(QueryFieldsMixin, ModelSerializer):
     class Meta:
         model = ncserum
         id_field = 'id'
