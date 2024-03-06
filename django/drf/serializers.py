@@ -17,7 +17,7 @@ class pfas_dust_water_Serializer(GeoFeatureModelSerializer):
         model = pfas_dust_water 
         geo_field = 'geom'
         id_field = 'id'
-        fields = ('id','sample','compound','concentration_ng_per_g','city','state','longitude','latitude')
+        fields = ('id','sample','compound','concentration_ng_per_g','city','state','medium','longitude','latitude')
 
 class ahhs_dust_data_Serializer(ModelSerializer):
     class Meta:

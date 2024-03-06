@@ -20,7 +20,7 @@ class drf_pfas_hot_spot_View(viewsets.ModelViewSet):
     queryset = pfas_hot_spot.objects.all() #.order_by('time')
     serializer_class = pfas_hot_spot_Serializer
     filter_backends = [DjangoFilterBackend, InBBoxFilter]
-    filter_fields = ['id','dust_sample','dust_compound','dust_concentration_ng_per_g','city','state','longitude','latitude''geom']
+    filter_fields = ['id','dust_sample','dust_compound','dust_concentration_ng_per_g','city','state','longitude','latitude','geom']
 
     # Function to enable search by distance from lon/lat point
     @action(detail=False, methods=['get'])
@@ -41,7 +41,8 @@ class drf_pfas_dust_water_View(viewsets.ModelViewSet):
     queryset = pfas_dust_water.objects.all() #.order_by('time')
     serializer_class = pfas_dust_water_Serializer
     filter_backends = [DjangoFilterBackend, InBBoxFilter]
-    filter_fields = ['id','dust_sample','dust_compound','dust_concentration_ng_per_g','city','state','longitude','latitude''geom']
+    # 'id','sample','compound','concentration_ng_per_g','city','state','longitude','latitude'
+    filter_fields = ['id','sample','compound','concentration_ng_per_g','city','state','medium','longitude','latitude','geom']
 
     # Function to enable search by distance from lon/lat point
     @action(detail=False, methods=['get'])
