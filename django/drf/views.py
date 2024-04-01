@@ -4,12 +4,13 @@ from rest_framework.response import Response
 from django.contrib.gis.db.models.functions import Distance
 #from django.contrib.gis.geos import GEOSGeometry,Point
 from django.contrib.gis.geos import Point
-from rest_framework_gis.filters import InBBoxFilter
+from rest_framework_gis.filters import InBBoxFilter, DistanceToPointFilter, DistanceToPointOrderingFilter
 from rest_framework.decorators import action
 from url_filter.integrations.drf import DjangoFilterBackend
 from .serializers import pfas_hot_spot_Serializer, pfas_dust_water_Serializer, ahhs_dust_data_Serializer, ahhs_water_data_Serializer, ncserum_Serializer, pfas_in_tapwater_usgs_Serializer
 from .models import pfas_hot_spot, pfas_dust_water, ahhs_dust_data, ahhs_water_data, ncserum, pfas_in_tapwater_usgs
 from rest_framework.pagination import PageNumberPagination
+from rest_framework_gis.pagination import GeoJsonPagination
 
 # Change page size dynamically by by using the psize variable in the URL
 class CustomPageNumberPagination(PageNumberPagination):
@@ -41,7 +42,6 @@ class drf_pfas_dust_water_View(viewsets.ModelViewSet):
     queryset = pfas_dust_water.objects.all() #.order_by('time')
     serializer_class = pfas_dust_water_Serializer
     filter_backends = [DjangoFilterBackend, InBBoxFilter]
-    # 'id','sample','compound','concentration_ng_per_g','city','state','longitude','latitude'
     filter_fields = ['id','sample','compound','concentration_ng_per_g','city','state','medium','longitude','latitude','geom']
 
     # Function to enable search by distance from lon/lat point
@@ -105,10 +105,11 @@ class drf_ncserum_View(viewsets.ModelViewSet):
                      'pfuda_concentration', 'pfuda_mrl', 'pfuda_dl', 'pfuda_flags']
 
 class drf_pfas_in_tapwater_usgs_View(viewsets.ModelViewSet):
-    pagination_class = CustomPageNumberPagination
+    pagination_class = GeoJsonPagination
     queryset = pfas_in_tapwater_usgs.objects.all()
     serializer_class = pfas_in_tapwater_usgs_Serializer
-    filter_backends = [DjangoFilterBackend]
-    filter_fields = ['id', 'study', 'station_na', 'site_type', 'sampleyear', 'detects', 'sum_pfas', 'pfprs', 'pfpes', 'pfpea', 
-                     'pfos', 'pfoa', 'pfhxs', 'pfhxa', 'pfhps', 'pfhpa', 'pfds_num', 'pfda_num', 'pfbs', 'pfba', 'pf', 'genx_num', 
-                     'fosa', 'f6_2fts', 'latitude', 'longitude', 'geom']
+    filter_backends = (InBBoxFilter,DistanceToPointFilter,DistanceToPointOrderingFilter,DjangoFilterBackend)
+    bbox_filter_include_overlapping = True
+    distance_filter_field = 'geom'
+    distance_ordering_filter_field = 'geom'
+    distance_filter_convert_meters = True

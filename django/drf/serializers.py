@@ -65,8 +65,8 @@ class ncserum_Serializer(QueryFieldsMixin, ModelSerializer):
 class pfas_in_tapwater_usgs_Serializer(GeoFeatureModelSerializer):
     class Meta:
         model = pfas_in_tapwater_usgs
-        geo_field = 'geom'
         id_field = 'id'
+        geo_field = 'geom'
         fields = ('id', 'study', 'station_na', 'site_type', 'sampleyear', 'detects', 'sum_pfas', 'pfprs', 'pfpes', 'pfpea', 'pfos', 
                   'pfoa', 'pfhxs', 'pfhxa', 'pfhps', 'pfhpa', 'pfds_num', 'pfda_num', 'pfbs', 'pfba', 'pf', 'genx_num', 'fosa', 
                   'f6_2fts', 'latitude', 'longitude')
