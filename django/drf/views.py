@@ -113,3 +113,6 @@ class drf_pfas_in_tapwater_usgs_View(viewsets.ModelViewSet):
     distance_filter_field = 'geom'
     distance_ordering_filter_field = 'geom'
     distance_filter_convert_meters = True
+    filter_fields = ['id', 'study', 'station_na', 'site_type', 'sampleyear', 'detects', 'sum_pfas', 'pfprs', 'pfpes', 'pfpea', 'pfos',
+                     'pfoa', 'pfhxs', 'pfhxa', 'pfhps', 'pfhpa', 'pfds_num', 'pfda_num', 'pfbs', 'pfba', 'pf', 'genx_num', 'fosa',
+                     'f6_2fts', 'latitude', 'longitude']
