@@ -21,12 +21,11 @@ from . import views
 # Set URL for gauge geometry Django views
 router = routers.DefaultRouter()
 
-router.register(r'pfas_hot_spot', views.drf_pfas_hot_spot_View, 'pfast_hot_spot')
-router.register(r'pfas_dust_water', views.drf_pfas_dust_water_View, 'pfast_dust_water')
-router.register(r'ahhs_dust_data', views.drf_ahhs_dust_data_View, 'ahhs_dust_data')
-router.register(r'ahhs_water_data', views.drf_ahhs_water_data_View, 'ahhs_water_data')
-router.register(r'ncserum', views.drf_ncserum_View, 'ncserum')
-router.register(r'pfas_in_tapwater_usgs', views.drf_pfas_in_tapwater_usgs_View, 'pfas_in_tapwater_usgs')
+router.register(r'ahhs_dust_data', views.podm_ahhs_dust_data_View, 'ahhs_dust_data')
+router.register(r'ahhs_water_data', views.podm_ahhs_water_data_View, 'ahhs_water_data')
+router.register(r'ncserum', views.podm_ncserum_View, 'ncserum')
+router.register(r'pfas_in_tapwater_usgs', views.podm_pfas_in_tapwater_usgs_View, 'pfas_in_tapwater_usgs')
+router.register(r'pfas_sample_data', views.podm_pfas_sample_data_View, 'pfas_sample_data')
 
 urlpatterns = [
     path("api/", include(router.urls)),

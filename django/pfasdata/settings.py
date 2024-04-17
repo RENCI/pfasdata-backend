@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'rest_framework',  # new
     'rest_framework_gis',  # new
 
-    'drf',  # new
+    'podm',  # new
 ]
 
 REST_FRAMEWORK = {
