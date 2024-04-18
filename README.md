@@ -48,25 +48,25 @@ docker-compose exec web python manage.py migrate --no-input
 
 Create .env.prod and .env.prod.db files
 
-In the project root directory create a file named .env and add the following information to it:
+In the project root directory create a file named .env.prod and add the following information to it:
 
 DEBUG=1
-SECRET_KEY=change_me
-DJANGO_ALLOWED_HOSTS=localhost 0.0.0.0 127.0.0.1 [::1]
-SQL_ENGINE=timescale.db.backends.postgis
-SQL_DATABASE=pfasdata_prod
-SQL_USER=pfasdata
-SQL_PASSWORD=xxxxxxxxx
-SQL_HOST=db
-SQL_PORT=5432
-DATABASE=postgres
+SECRET_KEY=change_me  
+DJANGO_ALLOWED_HOSTS=localhost 0.0.0.0 127.0.0.1 [::1]  
+SQL_ENGINE=django.contrib.gis.db.backends.postgis  
+SQL_DATABASE=pfasdata_prod  
+SQL_USER=pfasdata  
+SQL_PASSWORD=xxxxxxxxx  
+SQL_HOST=db  
+SQL_PORT=5432  
+DATABASE=postgres  
 
 Add your own password.
 
-Then create a file nameed .env.db and add the following information to it:
+Then create a file nameed .env.prod.db and add the following information to it:
 
-POSTGRES_USER=pfasdata     
-POSTGRES_PASSWORD=xxxxxxxxx    
+POSTGRES_USER=pfasdata  
+POSTGRES_PASSWORD=xxxxxxxxx   
 POSTGRES_DB=pfasdata_prod
 
 Add your own password here as well.
