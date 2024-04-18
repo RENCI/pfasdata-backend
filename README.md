@@ -11,12 +11,12 @@ After downloading or cloning the repository, change your directory to the projec
 
 Create .env.dev and .env.dev.db files  
 
-In the project root directory create a file named .env and add the following information to it:  
+In the project root directory create a file named .env.dev and add the following information to it:  
 
 DEBUG=1  
 SECRET_KEY=change_me  
 DJANGO_ALLOWED_HOSTS=localhost 0.0.0.0 127.0.0.1 [::1]  
-SQL_ENGINE=timescale.db.backends.postgis  
+SQL_ENGINE=django.contrib.gis.db.backends.postgis 
 SQL_DATABASE=pfasdata_dev
 SQL_USER=pfasdata 
 SQL_PASSWORD=xxxxxxxxx  
@@ -26,7 +26,7 @@ DATABASE=postgres
 
 Add your own password.  
 
-Then create a file nameed .env.db and add the following information to it:  
+Then create a file nameed .env.dev.db and add the following information to it:  
 
 POSTGRES_USER=pfasdata  
 POSTGRES_PASSWORD=xxxxxxxxx  
