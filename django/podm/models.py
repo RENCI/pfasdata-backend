@@ -344,7 +344,7 @@ class study(models.Model):
 class technique(models.Model):
     technique_id = models.AutoField(primary_key=True)
     measurement = models.CharField(max_length=200,null=True)
-    unit = models.CharField(max_length=20,null=True)
+    units = models.CharField(max_length=20,null=True)
 
     class Meta:
         managed = False
@@ -379,7 +379,7 @@ class pfas_sample_data(models.Model):
     sample = models.CharField(max_length=30,null=False)
     study = models.CharField(max_length=100,null=True)
     pi = models.CharField(max_length=50,null=False)
-    unit = models.CharField(max_length=20,null=True)
+    units = models.CharField(max_length=20,null=True)
     medium = models.CharField(max_length=20,null=True)
     city = models.CharField(max_length=200,null=True)
     state = models.CharField(max_length=2,null=True)
