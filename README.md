@@ -36,7 +36,14 @@ Add your own password here as well.
 
 ### Run docker-compose
 
-In the next step, from the project root directory run docker-compose on the development docker-compose.yml file:  
+Before running docker-compose edit the docker-compose.yml file changine the line where 
+the volume for the project data is created:
+
+- /PATH/TO/DATA/DIRECTORY:/projects/pfas/data
+
+This should be changed to the direcctory on you machine where that data is located.
+
+Then from the project root directory run docker-compose on the development docker-compose.yml file:  
 
 docker-compose up -d --build   
 
