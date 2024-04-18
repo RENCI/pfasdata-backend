@@ -16,13 +16,13 @@ In the project root directory create a file named .env.dev and add the following
 DEBUG=1  
 SECRET_KEY=change_me  
 DJANGO_ALLOWED_HOSTS=localhost 0.0.0.0 127.0.0.1 [::1]  
-SQL_ENGINE=django.contrib.gis.db.backends.postgis 
-SQL_DATABASE=pfasdata_dev
-SQL_USER=pfasdata 
+SQL_ENGINE=django.contrib.gis.db.backends.postgis  
+SQL_DATABASE=pfasdata_dev  
+SQL_USER=pfasdata  
 SQL_PASSWORD=xxxxxxxxx  
 SQL_HOST=db  
 SQL_PORT=5432  
-DATABASE=postgres  
+DATABASE=postgres 
 
 Add your own password.  
 
