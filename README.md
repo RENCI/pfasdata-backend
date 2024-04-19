@@ -87,3 +87,15 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ### Run migrate to create tables in DB
 
 docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+
+### Create non managed DB tables
+
+The tables in the PFAS Observationn Data Model are not managed by Django, so they are not created with "python manage.py migrate" is run. They need to be created by running the SQL files in the sql directory (pfasdata-backend/sql) of the Repo. The createTablesView.sh file should be modified changing the PGPASSWORD to the one you use for your DB and then run to create these tables:
+
+./createTablesView.sh
+
+After the tables have been created move all the PFAS data files to the directory that you declaired in the docker-compose.yml, and ingest this data into the DB in the approprieate tables. After this data has been ingested run ingestPfasSamples.py by using the shell script ingestCommands.sh:
+
+./ingestCommands.sh 
+
+
