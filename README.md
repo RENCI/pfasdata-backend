@@ -98,4 +98,10 @@ After the tables have been created move all the PFAS data files to the directory
 
 ./ingestCommands.sh 
 
+To run ingestPfasSamples.py the following Python module need to be installed:
+
+pandas 
+psycopg 
+argparse 
+dotenv 
 
