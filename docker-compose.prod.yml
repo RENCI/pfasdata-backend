@@ -16,6 +16,7 @@ services:
     depends_on:
       - db
   db:
+    restart: always
     image: postgis/postgis:13-3.4
     ports:
       - 5432:${SQL_PORT:-5432}
@@ -33,8 +34,12 @@ services:
       - media_volume:/home/django/web/mediafiles
     ports:
       - 80:80
+      - 443:443
     depends_on:
       - web
+    volumes:
+      - /data/certs/pfas-db-dev_mdc_renci_unc_edu_public.cer:/etc/ssl/SSL.crt
+      - /data/certs/pfas-db-dev_mdc_renci_unc_edu_private.key:/etc/ssl/SSL.key
 
 volumes:
   postgres_data:
