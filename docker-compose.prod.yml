@@ -5,7 +5,7 @@ services:
     build:
       context: ./django
       dockerfile: Dockerfile.prod
-    command: gunicorn pfasdata.wsgi:application --certfile=/etc/ssl/SSL.crt --keyfile=/etc/ssl/SSL.key --bind 0.0.0.0:8000
+    command: sh -c "gunicorn --config gunicorn_config.py pfasdata.wsgi:application"
     volumes:
       - static_volume:/home/django/web/staticfiles
       - media_volume:/home/django/web/mediafiles
