@@ -5,10 +5,12 @@ services:
     build:
       context: ./django
       dockerfile: Dockerfile.prod
-    command: gunicorn pfasdata.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn pfasdata.wsgi:application --certfile=/etc/ssl/SSL.crt --keyfile=/etc/ssl/SSL.key --bind 0.0.0.0:8000
     volumes:
       - static_volume:/home/django/web/staticfiles
       - media_volume:/home/django/web/mediafiles
+      - /data/certs/pfas-db-dev_mdc_renci_unc_edu_public.cer:/etc/ssl/SSL.crt
+      - /data/certs/pfas-db-dev_mdc_renci_unc_edu_private.key:/etc/ssl/SSL.key
     expose:
       - 8000
     env_file:
@@ -16,10 +18,9 @@ services:
     depends_on:
       - db
   db:
-    restart: always
     image: postgis/postgis:13-3.4
     ports:
-      - 5432:${SQL_PORT:-5432}
+      - 5433:${SQL_PORT:-5432}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - /projects/pfas/data:/projects/pfas/data
