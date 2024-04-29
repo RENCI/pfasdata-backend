@@ -5,7 +5,7 @@ services:
     build:
       context: ./django
       dockerfile: Dockerfile.prod
-    command: gunicorn pfasdata.wsgi:application --bind 0.0.0.0:8000 
+    command: gunicorn --config gunicorn_config.py pfasdata.wsgi:application 
     restart: always
     volumes:
       - static_volume:/home/django/web/staticfiles
