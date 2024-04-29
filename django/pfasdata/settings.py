@@ -75,7 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-"""
+
 CORS_ALLOWED_ORIGINS = [
     "https://pfas-app-dev.mdc.renci.unc.edu",
     "https://pfas-app-dev.renci.unc.edu",
@@ -87,11 +87,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://pfas-db-dev.renci.unc.edu",
     "http://localhost:8000",
 ]
-"""
+
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'pfasdata.urls'
