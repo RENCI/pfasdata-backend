@@ -15,7 +15,7 @@ services:
   db:
     image: postgis/postgis:13-3.4
     ports:
-      - 5433:${SQL_PORT:-5432}
+      - 5432:${SQL_PORT:-5432}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - /PATH/TO/DATA/DIRECTORY:/projects/pfas/data

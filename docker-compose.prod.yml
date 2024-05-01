@@ -5,7 +5,8 @@ services:
     build:
       context: ./django
       dockerfile: Dockerfile.prod
-    command: gunicorn pfasdata.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn --config gunicorn_config.py pfasdata.wsgi:application 
+    restart: always
     volumes:
       - static_volume:/home/django/web/staticfiles
       - media_volume:/home/django/web/mediafiles
@@ -28,10 +29,13 @@ services:
     build: 
       context: .
       dockerfile: nginx/Dockerfile
+    restart: always
     volumes:
       - static_volume:/home/django/web/staticfiles
       - media_volume:/home/django/web/mediafiles
+      - /data/certs/:/etc/ssl/certs/:ro
     ports:
+      - 443:443
       - 80:80
     depends_on:
       - web
