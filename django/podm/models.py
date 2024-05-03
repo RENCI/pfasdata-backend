@@ -305,15 +305,17 @@ class pfas_data(models.Model):
         managed = False
         db_table = "podm_pfas_data"
 
-class nta_data(models.Model):
+class ntar_data(models.Model):
     data_id = models.AutoField(primary_key=True)
     sample = models.CharField(max_length=30,null=False)
-    pfas_name = models.CharField(max_length=20,null=False)
+    pfas_short_name = models.CharField(max_length=25,null=False)
+    pfas_long_name = models.CharField(max_length=120,null=False)
+    flags = models.CharField(max_length=15,null=False)
     measurement = models.FloatField()
 
     class Meta:
         managed = False
-        db_table = "podm_nta_data"
+        db_table = "podm_ntar_data"
 
 class sample(models.Model):
     sample_id = models.AutoField(primary_key=True)
@@ -457,3 +459,21 @@ class pfas_sample_data(models.Model):
         managed = False
         db_table = "podm_pfas_sample_data"
 
+class ntar_sample_data(models.Model):
+    sample_id = models.AutoField(primary_key=True)
+    sample = models.CharField(max_length=30,null=False)
+    study = models.CharField(max_length=100,null=True)
+    pi = models.CharField(max_length=50,null=False)
+    units = models.CharField(max_length=20,null=True)
+    medium = models.CharField(max_length=20,null=True)
+    city = models.CharField(max_length=200,null=True)
+    state = models.CharField(max_length=2,null=True)
+    zipcode = models.CharField(max_length=7,null=True)
+    pfas_short_name = models.CharField(max_length=25,null=False)
+    pfas_long_name = models.CharField(max_length=120,null=False)
+    flags = models.CharField(max_length=15,null=False)
+    measurement = models.FloatField()
+
+    class Meta:
+        managed = False
+        db_table = "podm_ntar_sample_data"

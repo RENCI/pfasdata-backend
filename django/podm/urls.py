@@ -26,6 +26,7 @@ router.register(r'ahhs_water_data', views.podm_ahhs_water_data_View, 'ahhs_water
 router.register(r'ncserum', views.podm_ncserum_View, 'ncserum')
 router.register(r'pfas_in_tapwater_usgs', views.podm_pfas_in_tapwater_usgs_View, 'pfas_in_tapwater_usgs')
 router.register(r'pfas_sample_data', views.podm_pfas_sample_data_View, 'pfas_sample_data')
+router.register(r'ntar_sample_data', views.podm_ntar_sample_data_View, 'ntar_sample_data')
 
 urlpatterns = [
     path("api/", include(router.urls)),
