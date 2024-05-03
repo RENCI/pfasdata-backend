@@ -156,7 +156,7 @@ def getTechniqueId(measurement):
         print(error)
 
 def ingestSample(inputDir, inputFile):
-    df = pd.read_csv(inputDir+inputFile)
+    df = pd.read_csv(inputDir+inputFile, dtype={'zipcode': 'str'})
     
     for index, row in df.iterrows():
         # sample,study,pi,measurement,units,medium,city,state,zipcode

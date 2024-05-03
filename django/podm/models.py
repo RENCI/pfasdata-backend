@@ -366,7 +366,7 @@ class location(models.Model):
     location_id = models.AutoField(primary_key=True)
     city = models.CharField(max_length=200,null=True)
     state = models.CharField(max_length=2,null=True)
-    zipcode = models.IntegerField()
+    zipcode = models.CharField(max_length=7,null=True) 
     latitude = models.FloatField()
     longitude = models.FloatField()
 
@@ -383,7 +383,7 @@ class pfas_sample_data(models.Model):
     medium = models.CharField(max_length=20,null=True)
     city = models.CharField(max_length=200,null=True)
     state = models.CharField(max_length=2,null=True)
-    zipcode = models.IntegerField()
+    zipcode = models.CharField(max_length=7,null=True)
     pfna_concentration = models.FloatField()
     pfna_mrl = models.FloatField()
     pfna_dl = models.FloatField()
