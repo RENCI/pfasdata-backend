@@ -1,6 +1,7 @@
 CREATE or REPLACE VIEW  podm_pfas_sample_data AS
-SELECT sa.sample_id AS sample_id,
-       sa.sample AS sample,
+SELECT sa.id AS id,
+       sa.sample_id AS sample_id,
+       sg.group_id AS group_id, 
        st.study AS study,
        st.pi as pi,
        t.units AS units,
@@ -81,4 +82,5 @@ INNER JOIN podm_study st ON st.study_id=sa.study_id
 INNER JOIN podm_technique t ON t.technique_id=sa.technique_id
 INNER JOIN podm_medium m ON m.medium_id=sa.medium_id
 INNER JOIN podm_location l ON l.location_id=sa.location_id
-INNER JOIN podm_pfas_data d ON d.sample=sa.sample;
+INNER JOIN podm_sample_groups sg ON sg.group_id=sa.group_id
+INNER JOIN podm_pfas_data d ON d.sample_id=sa.sample_id;

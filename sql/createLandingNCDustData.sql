@@ -1,5 +1,5 @@
-CREATE TABLE IF NOT EXISTS podm_pfas_data (
-    data_id SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS landing_ncdust_data (
+    id SERIAL PRIMARY KEY,
     sample_id VARCHAR(30),
     pfna_concentration NUMERIC,
     pfna_mrl NUMERIC,
