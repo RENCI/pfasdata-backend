@@ -6,9 +6,9 @@ import argparse
 from dotenv import find_dotenv
 from dotenv import load_dotenv
 
-env_file = find_dotenv(".env")
+env_file = find_dotenv(".env.dev")
 load_dotenv(env_file)
-env_file = find_dotenv(".env.db")
+env_file = find_dotenv(".env.db.dev")
 load_dotenv(env_file)
 
 def insertSample(landingTable,studyId,techniqueId,mediumId):
@@ -23,24 +23,12 @@ def insertSample(landingTable,studyId,techniqueId,mediumId):
             cur = conn.cursor()
             
             # Run query
-            if landingTable == 'landing_ncserum_data' or \
-               landingTable == 'landing_ncdust_data':
-                # Ingest sample_id, study_id, medium_id, location_id and
-                # technique_id for nc data
-                cur.execute(sql.SQL("""INSERT INTO podm_sample(sample_id, study_id, 
-                                                               medium_id, location_id,
-                                                               technique_id)
-                                       SELECT sample_id, %s, %s, %s, %s
+            cur.execute(sql.SQL("""INSERT INTO podm_sample(sample_id, study_id, group_id, medium_id, 
+                                                           location_id, technique_id)
+                                       SELECT sample_id, %s, %s, %s, %s, %s
                                        FROM {}""").format(sql.Identifier(landingTable)),
-                                       [studyId, mediumId, 1, techniqueId,])              
+                                       [studyId, -9, mediumId, 1, techniqueId,])              
                 
-            else:
-                cur.execute(sql.SQL("""INSERT INTO podm_sample(sample_id, study_id, 
-                                                               medium_id, technique_id)
-                                       SELECT sample_id, %s, %s, %s
-                                       FROM {}""").format(sql.Identifier(landingTable)),
-                                       [studyId, mediumId, techniqueId,])                
-
             # Close cursor and database connection
             cur.close()
             conn.close()
@@ -48,7 +36,7 @@ def insertSample(landingTable,studyId,techniqueId,mediumId):
     # If exception log error
     except (Exception, psycopg.DatabaseError) as error:
         print(error)
-	
+
 def addGroupId(sgidcname,mediumId):
     try:
         # Create connection to database, set autocommit, and get cursor
@@ -205,24 +193,26 @@ def ingestSample(tableName,study,pi,measurement,medium,sgidcname):
 
     insertSample(tableName,studyId,techniqueId,mediumId)
     addGroupId(sgidcname,mediumId)
-    addLocationId(sgidcname,mediumId)
+
+    if study == 'AHHS':
+        addLocationId(sgidcname,mediumId)
 
 def main(args):
-    tableName = args.tableName
+    landingtablename = args.landingTableName
     study = args.study
     pi = args.pi
     measurement = args.measurement
     medium = args.medium
     sgidcname = args.sgidcname
 
-    ingestSample(landingtable,study,pi,measurement,medium,sgidcname)
+    ingestSample(landingtablename,study,pi,measurement,medium,sgidcname)
 
 # Run main function 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     # None optional argument
-    parser.add_argument("--tableName", help="The landing table name", action="store", dest="tableName", required=True)
+    parser.add_argument("--landingTableName", help="The landing table name", action="store", dest="landingTableName", required=True)
     parser.add_argument("--study", help="The name of the study", action="store", dest="study", required=True)
     parser.add_argument("--pi", help="The name of the PI", action="store", dest="pi", required=True)
     parser.add_argument("--measurement", help="The type of measurement", action="store", dest="measurement", required=True)
