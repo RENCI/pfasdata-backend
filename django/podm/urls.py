@@ -21,9 +21,6 @@ from . import views
 # Set URL for gauge geometry Django views
 router = routers.DefaultRouter()
 
-router.register(r'ahhs_dust_data', views.podm_ahhs_dust_data_View, 'ahhs_dust_data')
-router.register(r'ahhs_water_data', views.podm_ahhs_water_data_View, 'ahhs_water_data')
-router.register(r'ncserum', views.podm_ncserum_View, 'ncserum')
 router.register(r'pfas_in_tapwater_usgs', views.podm_pfas_in_tapwater_usgs_View, 'pfas_in_tapwater_usgs')
 router.register(r'pfas_sample_data', views.podm_pfas_sample_data_View, 'pfas_sample_data')
 router.register(r'ntar_sample_data', views.podm_ntar_sample_data_View, 'ntar_sample_data')

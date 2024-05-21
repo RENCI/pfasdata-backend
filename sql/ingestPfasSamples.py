@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import psycopg
+from psycopg import sql
 import argparse
 from dotenv import find_dotenv
 from dotenv import load_dotenv
@@ -10,7 +11,7 @@ load_dotenv(env_file)
 env_file = find_dotenv(".env.db.dev")
 load_dotenv(env_file)
 
-def insertSample(studyId,mediumId,locationId,techniqueId,sample):
+def insertSample(landingTable,studyId,techniqueId,mediumId):
     try:
         # Create connection to database, set autocommit, and get cursor
         with psycopg.connect(dbname=os.environ['SQL_DATABASE'],
@@ -22,19 +23,79 @@ def insertSample(studyId,mediumId,locationId,techniqueId,sample):
             cur = conn.cursor()
             
             # Run query
-            cur.execute("""INSERT INTO podm_sample(study_id, medium_id, location_id, technique_id, sample)
-                           VALUES (%(studyid)s, %(mediumid)s, %(locationid)s, %(techniqueid)s,%(sample)s)""",
-                        {'studyid':studyId,'mediumid':mediumId,'locationid':locationId,
-                         'techniqueid':techniqueId,'sample':sample})
-
+            cur.execute(sql.SQL("""INSERT INTO podm_sample(sample_id, study_id, group_id, medium_id, 
+                                                           location_id, technique_id)
+                                       SELECT sample_id, %s, %s, %s, %s, %s
+                                       FROM {}""").format(sql.Identifier(landingTable)),
+                                       [studyId, -9, mediumId, 1, techniqueId,])              
+                
             # Close cursor and database connection
             cur.close()
             conn.close()
-
+            
     # If exception log error
     except (Exception, psycopg.DatabaseError) as error:
         print(error)
 
+def addGroupId(sgidcname,mediumId):
+    try:
+        # Create connection to database, set autocommit, and get cursor
+        with psycopg.connect(dbname=os.environ['SQL_DATABASE'],
+                             user=os.environ['SQL_USER'],
+                             host=os.environ['SQL_HOST'],
+                             port=os.environ['SQL_PORT'],
+                             password=os.environ['SQL_PASSWORD'],
+                             autocommit=True) as conn:
+            cur = conn.cursor()
+            
+            # Run query
+            cur.execute(sql.SQL("""UPDATE podm_sample ps
+                                   SET group_id = sg.group_id
+                                   FROM podm_sample_groups sg
+                                   WHERE sg.{sgidcname}=ps.sample_id AND 
+                                   ps.medium_id = %s 
+                                   """).format(sgidcname=sql.Identifier(sgidcname)),
+                                   [mediumId])                
+
+                
+            # Close cursor and database connection
+            cur.close()
+            conn.close()
+            
+    # If exception log error
+    except (Exception, psycopg.DatabaseError) as error:
+        print(error)
+	
+def addLocationId(sgidcname,mediumId):
+    try:
+        # Create connection to database, set autocommit, and get cursor
+        with psycopg.connect(dbname=os.environ['SQL_DATABASE'],
+                             user=os.environ['SQL_USER'],
+                             host=os.environ['SQL_HOST'],
+                             port=os.environ['SQL_PORT'],
+                             password=os.environ['SQL_PASSWORD'],
+                             autocommit=True) as conn:
+            cur = conn.cursor()
+            
+            # Run query
+            cur.execute(sql.SQL("""UPDATE podm_sample ps
+                                   SET location_id = pl.location_id
+                                   FROM podm_location pl
+                                   INNER JOIN landing_location ll ON ll.zipcode=pl.zipcode
+                                   WHERE ll.{sgidcname}=ps.sample_id
+                                   AND ps.medium_id = %s 
+                                   """).format(sgidcname=sql.Identifier(sgidcname)),
+                                   [mediumId])                
+
+                
+            # Close cursor and database connection
+            cur.close()
+            conn.close()
+            
+    # If exception log error
+    except (Exception, psycopg.DatabaseError) as error:
+        print(error)
+	
 def getStudyId(study,pi):
     try:
         # Create connection to database, set autocommit, and get cursor
@@ -53,18 +114,18 @@ def getStudyId(study,pi):
 
             # Fetch value
             value = cur.fetchall()
-            
+
             # Close cursor and database connection
             cur.close()
             conn.close()
 
             # return Value
             return(value[0][0])
-    
+
     # If exception log error
     except (Exception, psycopg.DatabaseError) as error:
         print(error)
-
+	
 def getMediumId(medium):
     try:
         # Create connection to database, set autocommit, and get cursor
@@ -83,48 +144,18 @@ def getMediumId(medium):
 
             # Fetch value
             value = cur.fetchall()
-            
+
             # Close cursor and database connection
             cur.close()
             conn.close()
 
             # return Value
             return(value[0][0])
-    
+
     # If exception log error
     except (Exception, psycopg.DatabaseError) as error:
         print(error)
-
-def getLocationId(zipcode):
-    try:
-        # Create connection to database, set autocommit, and get cursor
-        with psycopg.connect(dbname=os.environ['SQL_DATABASE'],
-                             user=os.environ['SQL_USER'],
-                             host=os.environ['SQL_HOST'],
-                             port=os.environ['SQL_PORT'],
-                             password=os.environ['SQL_PASSWORD'],
-                             autocommit=True) as conn:
-            cur = conn.cursor()
-
-            # Run query
-            cur.execute("""SELECT location_id FROM podm_location
-                           WHERE zipcode = %(zipcode)s""",
-                        {'zipcode':zipcode})
-
-            # Fetch value
-            value = cur.fetchall()
-            
-            # Close cursor and database connection
-            cur.close()
-            conn.close()
-
-            # return Value
-            return(value[0][0])
-    
-    # If exception log error
-    except (Exception, psycopg.DatabaseError) as error:
-        print(error)
-
+	
 def getTechniqueId(measurement):
     try:
         # Create connection to database, set autocommit, and get cursor
@@ -143,56 +174,50 @@ def getTechniqueId(measurement):
 
             # Fetch value
             value = cur.fetchall()
-            
+
             # Close cursor and database connection
             cur.close()
             conn.close()
 
             # return Value
             return(value[0][0])
-    
+
     # If exception log error
     except (Exception, psycopg.DatabaseError) as error:
         print(error)
+	
+def ingestSample(tableName,study,pi,measurement,medium,sgidcname):
+    studyId = getStudyId(study,pi)
+    techniqueId = getTechniqueId(measurement)
+    mediumId = getMediumId(medium)
 
-def ingestSample(inputDir, inputFile):
-    df = pd.read_csv(inputDir+inputFile, dtype={'zipcode': 'str'})
-    
-    for index, row in df.iterrows():
-        # sample,study,pi,measurement,units,medium,city,state,zipcode
-        sample = row['sample']
-        study = row['study']
-        pi = row['pi']
-        measurement = row['measurement']
-        units = row['units']
-        medium = row['medium']
-        city = row['city']
-        state = row['state']
-        zipcode = row['zipcode']
-        
-        
-        studyId = getStudyId(study,pi)
-        mediumId = getMediumId(medium)
-        locationId = getLocationId(zipcode)
-        techniqueId = getTechniqueId(measurement)
-        
-        #print('study_id',str(studyId),'medium_id',str(mediumId),'location_id',str(locationId),
-        #      'technique_id',str(techniqueId))
-        insertSample(studyId,mediumId,locationId,techniqueId,sample)
+    insertSample(tableName,studyId,techniqueId,mediumId)
+    addGroupId(sgidcname,mediumId)
+
+    if study == 'AHHS':
+        addLocationId(sgidcname,mediumId)
 
 def main(args):
-    inputDir = args.inputDir
-    inputFile = args.inputFile
+    landingtablename = args.landingTableName
+    study = args.study
+    pi = args.pi
+    measurement = args.measurement
+    medium = args.medium
+    sgidcname = args.sgidcname
 
-    ingestSample(inputDir, inputFile)
+    ingestSample(landingtablename,study,pi,measurement,medium,sgidcname)
 
 # Run main function 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     # None optional argument
-    parser.add_argument("--inputDir", help="Input directory path to data file", action="store", dest="inputDir", required=True)
-    parser.add_argument("--inputFile", help="Input file name", action="store", dest="inputFile", required=True)
+    parser.add_argument("--landingTableName", help="The landing table name", action="store", dest="landingTableName", required=True)
+    parser.add_argument("--study", help="The name of the study", action="store", dest="study", required=True)
+    parser.add_argument("--pi", help="The name of the PI", action="store", dest="pi", required=True)
+    parser.add_argument("--measurement", help="The type of measurement", action="store", dest="measurement", required=True)
+    parser.add_argument("--medium", help="The type of medium", action="store", dest="medium", required=True)
+    parser.add_argument("--sgidcname", help="The sample group column name", action="store", dest="sgidcname", required=True)
 
     # Parse arguments
     args = parser.parse_args()
