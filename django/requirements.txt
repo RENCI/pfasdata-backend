@@ -5,6 +5,7 @@ django-filter==23.5
 dj-url-filter==0.4.4
 djangorestframework-queryfields==1.1.0
 django-cors-headers==4.3.1
+djangorestframework-simplejwt[crypt]==5.3.1
 gunicorn==21.2.0
 cffi==1.16.0
 cryptography==42.0.5
