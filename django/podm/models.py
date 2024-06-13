@@ -8,6 +8,33 @@ STATUS_CHOICES = (
     ('p', 'Published')
 )
 
+class pfas_name_classification_info(models.Model):
+    id = models.AutoField(primary_key=True)
+    abbreviation = models.CharField(max_length=13,null=False)
+    chemical_name = models.CharField(max_length=74,null=False)
+    casrn = models.CharField(max_length=12,null=False)
+    dtxsid = models.CharField(max_length=15,null=False)
+    nhanes = models.CharField(max_length=1,null=True)
+    carbon_atoms = models.IntegerField()
+    formula = models.CharField(max_length=13,null=False)
+    pfaa = models.CharField(max_length=1,null=True)
+    pfca = models.CharField(max_length=1,null=True)
+    pfsa = models.CharField(max_length=1,null=True)
+    precursor = models.CharField(max_length=1,null=True)
+    ftbs = models.CharField(max_length=1,null=True)
+    dipap = models.CharField(max_length=1,null=True)
+    ftoh = models.CharField(max_length=1,null=True)
+    acid_ftca = models.CharField(max_length=1,null=True)
+    acid_fts = models.CharField(max_length=1,null=True)
+    substances_pasf = models.CharField(max_length=1,null=True)
+    sulfonamides_fasa = models.CharField(max_length=1,null=True)
+    ethanols_fase = models.CharField(max_length=1,null=True)
+    pfeca = models.CharField(max_length=1,null=True)
+    pfesa = models.CharField(max_length=1,null=True)
+    cl_pfesa = models.CharField(max_length=1,null=True)
+    carboxylic_acid = models.CharField(max_length=1,null=True)
+    sulfonic_acid = models.CharField(max_length=1,null=True)
+
 class pfas_in_tapwater_usgs(gmodels.Model):
     id = models.AutoField(primary_key=True)
     study = models.CharField(max_length=13,null=True)
@@ -112,10 +139,6 @@ class pfas_sample_data(models.Model):
     pfda_mrl = models.FloatField()
     pfda_dl = models.FloatField()
     pfda_flags = models.CharField(max_length=6,null=True)
-    pfuda_concentration = models.FloatField()
-    pfuda_mrl = models.FloatField()
-    pfuda_dl = models.FloatField()
-    pfuda_flags = models.CharField(max_length=6,null=True)
 
     class Meta:
         managed = False
