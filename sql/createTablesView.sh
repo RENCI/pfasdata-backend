@@ -15,5 +15,5 @@ PGPASSWORD=xxxxxxxx psql -U pfasdata -d pfasdata_dev -p 5432 -h localhost -f cre
 PGPASSWORD=xxxxxxxx psql -U pfasdata -d pfasdata_dev -p 5432 -h localhost -f createLandingAHHSDustData.sql
 PGPASSWORD=xxxxxxxx psql -U pfasdata -d pfasdata_dev -p 5432 -h localhost -f createLandingAHHSWaterData.sql
 PGPASSWORD=xxxxxxxx psql -U pfasdata -d pfasdata_dev -p 5432 -h localhost -f createLandingLocation.sql
-PGPASSWORD=xxxxxxxx psql -U pfasdata -d pfasdata_dev -p 5432 -h localhost -f createLandingNCDustData.sql
-PGPASSWORD=xxxxxxxx psql -U pfasdata -d pfasdata_dev -p 5432 -h localhost -f createLandingNCSerumData.sql
+PGPASSWORD=xxxxxxxx psql -U pfasdata -d pfasdata_dev -p 5432 -h localhost -f createLandingNCSDustData.sql
+PGPASSWORD=xxxxxxxx psql -U pfasdata -d pfasdata_dev -p 5432 -h localhost -f createLandingNCSSerumData.sql

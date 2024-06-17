@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS landing_ncserum_data (
+CREATE TABLE IF NOT EXISTS landing_ncsdust_data (
     id SERIAL PRIMARY KEY,
     sample_id VARCHAR(30),
     pfna_concentration NUMERIC,
@@ -64,9 +64,5 @@ CREATE TABLE IF NOT EXISTS landing_ncserum_data (
     pfda_concentration NUMERIC,
     pfda_mrl NUMERIC,
     pfda_dl NUMERIC,
-    pfda_flags VARCHAR(6),
-    pfuda_concentration NUMERIC,
-    pfuda_mrl NUMERIC,
-    pfuda_dl NUMERIC,
-    pfuda_flags VARCHAR(6)
+    pfda_flags VARCHAR(6)
 );

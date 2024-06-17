@@ -72,11 +72,7 @@ SELECT sa.id AS id,
        d.pfda_concentration AS pfda_concentration,
        d.pfda_mrl AS pfda_mrl,
        d.pfda_dl AS pfda_dl,
-       d.pfda_flags AS pfda_flags,
-       d.pfuda_concentration AS pfuda_concentration,
-       d.pfuda_mrl AS pfuda_mrl,
-       d.pfuda_dl AS pfuda_dl,
-       d.pfuda_flags AS pfuda_flags
+       d.pfda_flags AS pfda_flags
 FROM podm_sample sa
 INNER JOIN podm_study st ON st.study_id=sa.study_id
 INNER JOIN podm_technique t ON t.technique_id=sa.technique_id
