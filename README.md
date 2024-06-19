@@ -17,29 +17,29 @@ DEBUG=1
 SECRET_KEY=change_me  
 DJANGO_ALLOWED_HOSTS=localhost 0.0.0.0 127.0.0.1 [::1]  
 SQL_ENGINE=django.contrib.gis.db.backends.postgis  
-SQL_DATABASE=pfasdata_dev  
-SQL_USER=pfasdata  
+SQL_DATABASE=xxxxxxxx_dev  
+SQL_USER=xxxxxxxx  
 SQL_PASSWORD=xxxxxxxxx  
 SQL_HOST=db  
 SQL_PORT=5432  
 DATABASE=postgres 
 
-Add your own password. 
+Add your own database name, user and password. 
 
 Then create a file named .env.dev.db and add the following information to it:  
 
-POSTGRES_USER=pfasdata  
+POSTGRES_USER=xxxxxxx  
 POSTGRES_PASSWORD=xxxxxxxxx  
-POSTGRES_DB=pfasdata_dev
+POSTGRES_DB=xxxxxxxx_dev
 
-Add your own password here as well.  
+Add your own database name, user and password here as well.  
 
 ### Run docker-compose
 
 Before running docker-compose edit the docker-compose.yml file changing the line where 
 the volume for the project data is created:
 
-- /PATH/TO/DATA/DIRECTORY:/projects/pfas/data
+- /PATH/TO/DATA/DIRECTORY:/xxxxxxxx/pfas/data
 
 This should be changed to the directory on you machine where that data is located.
 
@@ -57,7 +57,7 @@ docker-compose exec web python manage.py createsuperuser
 
 Below are the prompts with responses when running createsuperuser:
 
-username: admin  
+username: xxxxx  
 email: your@email.address  
 password: xxxxxxx
 
@@ -76,26 +76,26 @@ DEBUG=1
 SECRET_KEY=change_me  
 DJANGO_ALLOWED_HOSTS=localhost 0.0.0.0 127.0.0.1 [::1]  
 SQL_ENGINE=django.contrib.gis.db.backends.postgis  
-SQL_DATABASE=pfasdata_prod  
-SQL_USER=pfasdata  
+SQL_DATABASE=xxxxxxxx_prod  
+SQL_USER=xxxxxxxx  
 SQL_PASSWORD=xxxxxxxxx  
 SQL_HOST=db  
 SQL_PORT=5432  
 DATABASE=postgres  
 
-Add your own password.
+Add your own database name, user and  password.
 
 Add the domain name of the machine your using to DJANGO_ALLOWED_HOSTS. For example:
 
-DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 pfas-db-dev.mdc.renci.unc.edu [::1]
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 pfas-db-dev.xxx.xxx.unc.edu [::1]
 
 Then create a file named .env.prod.db and add the following information to it:
 
-POSTGRES_USER=pfasdata  
+POSTGRES_USER=xxxxxxxx  
 POSTGRES_PASSWORD=xxxxxxxxx  
-POSTGRES_DB=pfasdata_prod
+POSTGRES_DB=xxxxxxxx_prod
 
-Add your own password here as well.
+Add your own database name, user and password here as well.
 
 ### Run docker-compose
 
@@ -113,35 +113,55 @@ docker-compose exec web python manage.py createsuperuser
 
 Below are the prompts with responses when running createsuperuser:
 
-username: admin  
+username: xxxxx  
 email: your@email.address  
 password: xxxxxxx
 
 Replace email and password with appropriate values.
 
 Login to: https://pfas-db-dev.mdc.renci.unc.edu/admin/ and create user pfas, including password. The user pfas will be used 
-too access data from the API using a json web token (JWT).
+too access data from the API using a JSON web token (JWT).
 
 ### Create non managed DB tables
 
-The tables in the PFAS Observation Data Model are not managed by Django, so they are not created with "python manage.py migrate" is run. They need to be created by running the SQL files in the SQL directory (pfasdata-backend/sql) of the Repo. The createTablesView.sh file should be modified changing the PGPASSWORD to the one you use for your DB and then run to create these tables:
+The tables in the PFAS Observation Data Model (PODM) are not managed by Django, so they are not created with "python manage.py migrate" 
+is run. They need to be created by running the SQL files in the SQL directory (pfasdata-backend/sql) of the Repo. The 
+createTablesView.sh file should be modified changing the PGPASSWORD to the one you use for your DB and then run to create these 
+tables:
 
-./createTablesView.sh
+ * ./createTablesView.sh
 
-After the tables have been created move all the PFAS data files to the directory that you declared in the docker-compose.yml, and ingest this data into the DB in the appropriate tables. After this data has been ingested run ingestPfasSamples.py by using the shell script ingestCommands.sh:
+After the tables have been created run the following shell command:
 
-./ingestCommands.sh 
+ * ./insertPfasMetaData.sh - you need to be in the pfasdata-backend/ingest/insert when you run this command
 
+The shell script insertPfasMetaData.sh will ingest the meta data for the peripheral tables (location, medium, sample group, 
+study and technique) in PODM.
+
+After that data has been ingested move all the PFAS CSV data files to the directory that you declared in the docker-compose.yml. 
+Then run the following shell command:
+
+ * ./psql_pfasdata_copy.sh - you need to be in the pfasdata-backend/ingest/copy when you run this command
+
+This will ingest all of the CSV data files into the landing, non-targeted, targeted, sample groups and PFAS naming 
+classification table.
+ 
+After that data has been ingested run ingestPfasSamples.py by using the shell script ingestCommands.sh:
+
+ * ./ingestCommands.sh 
+
+This will ingest data into the podm_sample data which is the central table in PODM. 
 To run ingestPfasSamples.py the following Python module need to be installed:
 
-pandas  
-psycopg  
-argparse  
-dotenv
+ - pandas  
+ - psycopg  
+ - argparse  
+ - dotenv
 
 # Create backup of DB using cronjob:
 
-The directory /pfasdata-backend/dbbackup, in this repo, contains files used to setup and run backups with a cronjob. These files are:
+The directory /pfasdata-backend/dbbackup, in this repo, contains files used to setup and run backups with a cronjob. 
+These files are:
 
  - pd_backup_rotated.sh the script that creates rotating backups. This script is currently setup to for five day (removes sixth day) rotating backups. 
  - pg_backup.config the script that configures how pd_backup_rotated.sh is run, including setting the days for the rotating backup  
