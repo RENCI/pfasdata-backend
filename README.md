@@ -129,12 +129,11 @@ is run. They need to be created by running the SQL files in the SQL directory (p
 createTablesView.sh file should be modified changing the PGPASSWORD to the one you use for your DB and then run to create these 
 tables:
 
-./createTablesView.sh
+ * ./createTablesView.sh
 
 After the tables have been created run the following shell command:
 
  * ./insertPfasMetaData.sh - you need to be in the pfasdata-backend/ingest/insert when you run this command
- * ./psql_pfasdata_copy.sh - you need to be in the pfasdata-backend/ingest/copy when you run this command
 
 The shell script insertPfasMetaData.sh will ingest the meta data for the peripheral tables (location, medium, sample group, 
 study and technique) in PODM.
@@ -149,19 +148,20 @@ classification table.
  
 After that data has been ingested run ingestPfasSamples.py by using the shell script ingestCommands.sh:
 
-./ingestCommands.sh 
+ * ./ingestCommands.sh 
 
-This will ingest data into the podm_sample data which is the central table in the PFAS Observation Data Model. 
+This will ingest data into the podm_sample data which is the central table in PODM. 
 To run ingestPfasSamples.py the following Python module need to be installed:
 
-pandas  
-psycopg  
-argparse  
-dotenv
+ - pandas  
+ - psycopg  
+ - argparse  
+ - dotenv
 
 # Create backup of DB using cronjob:
 
-The directory /pfasdata-backend/dbbackup, in this repo, contains files used to setup and run backups with a cronjob. These files are:
+The directory /pfasdata-backend/dbbackup, in this repo, contains files used to setup and run backups with a cronjob. 
+These files are:
 
  - pd_backup_rotated.sh the script that creates rotating backups. This script is currently setup to for five day (removes sixth day) rotating backups. 
  - pg_backup.config the script that configures how pd_backup_rotated.sh is run, including setting the days for the rotating backup  
