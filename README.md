@@ -141,8 +141,8 @@ dotenv
 
 # Create backup of DB using cronjob:
 
-The directory /pfasdata-backend/dbbackup, in this repo contains files used to setup and run backups using a cronjob. These files are:
+The directory /pfasdata-backend/dbbackup, in this repo, contains files used to setup and run backups with a cronjob. These files are:
 
-pd_backup_rotated.sh  the script that creates rotating backups. The script is currently setup to for five day (removes sixth day) rotating backups. 
-pg_backup.config  the that configures how pd_backup_rotated.sh is run, including setting the days for the rotating backup  
-cronjob.sh  an example cronjob file for running a cronjob of pd_backup_rotated.sh at 12 AM.
+ - pd_backup_rotated.sh the script that creates rotating backups. This script is currently setup to for five day (removes sixth day) rotating backups. 
+ - pg_backup.config the script that configures how pd_backup_rotated.sh is run, including setting the days for the rotating backup  
+ - cronjob.sh an example cronjob file for running a cronjob of pd_backup_rotated.sh at 12 AM.
