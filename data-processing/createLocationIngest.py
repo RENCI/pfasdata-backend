@@ -16,33 +16,25 @@ def main(args):
 
     # Get input arguments
     inPath = args.inPath
-    sqlPath = args.sqlPath
-    dustFile = args.dustFile
-    waterFile = args.waterFile
+    outPath = args.outPath
+    inFile = args.inFile
 
     # Read in two input files as DataFrames
-    dfd = pd.read_csv(inPath+dustFile, dtype={'Zipcode': 'str'})
-    dfw = pd.read_csv(inPath+waterFile, dtype={'Zipcode': 'str'})
+    df = pd.read_csv(inPath+inFile, dtype={'Zipcode': 'str'})
 
     # drop first column which pertains to the sample ID
-    columns = dfd.columns
-    dfd.drop(columns[0], inplace=True, axis=1)
-    columns = dfw.columns
-    dfw.drop(columns[0], inplace=True, axis=1)
-    dfb = pd.concat([dfd, dfw], ignore_index=True)
+    columns = df.columns
+    df.drop(columns[0], inplace=True, axis=1)
 
     # get unique zipcodes
-    zipcodes = list(dfb['Zipcode'].unique())
+    zipcodes = list(df['Zipcode'].unique())
 
     # open output file for writing
-    f = open(sqlPath+'insertLocation.sql', 'w')
+    f = open(outPath+inFile.split('.')[0]+'.sql', 'w')
 
     # write insert command and values command
     f.write('INSERT INTO podm_location (city, state, zipcode)\n')
     f.write('VALUES\n')
-
-    # insert fill values for serum data
-    f.write("('xxxx','xx','-99999'),\n")
 
     # count the number of zipcodes
     numzips = len(zipcodes)
@@ -54,8 +46,8 @@ def main(args):
         i = i + 1
     
         # extract unique city and state values for a specific zip code 
-        city = dfb['City'].loc[dfb['Zipcode'] == zipcode].unique()[0]
-        state = dfb['State'].loc[dfb['Zipcode'] == zipcode].unique()[0]
+        city = df['City'].loc[df['Zipcode'] == zipcode].unique()[0]
+        state = df['State'].loc[df['Zipcode'] == zipcode].unique()[0]
     
         # check if last iteration 
         if i != numzips:
@@ -77,12 +69,10 @@ if __name__ == "__main__":
         Parameters
             inPath: string
                 The directory path to the original dust and water data files.
-            sqlPath: string
+            outPath: string
                 The directory path to the output SQL data file.
-            dustFile: string
-                The file name of the dust location  data file. 
-            waterFile: string
-                The file name of the water location data file.
+            inFile: string
+                The file name of the original location data file. 
         Returns
             None
     ''' 
@@ -91,10 +81,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     # None optional argument
-    parser.add_argument("--inPath", help="The directory path to the original dust and water data files", action="store", dest="inPath", required=True)
-    parser.add_argument("--sqlPath", help="The directory path to the output SQL data file", action="store", dest="sqlPath", required=True)
-    parser.add_argument("--dustFile", help="The file name of the dust data file", action="store", dest="dustFile", required=True)
-    parser.add_argument("--waterFile", help="The file name of the water data file", action="store", dest="waterFile", required=True)
+    parser.add_argument("--inPath", help="The directory path to the original location data files", action="store", dest="inPath", required=True)
+    parser.add_argument("--outPath", help="The directory path to the output SQL data file", action="store", dest="outPath", required=True)
+    parser.add_argument("--inFile", help="The file name of the original location data file", action="store", dest="inFile", required=True)
  
     # Parse arguments        
     args = parser.parse_args()
