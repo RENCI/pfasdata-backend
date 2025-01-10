@@ -9,6 +9,8 @@ The insert directory contains scripts that use the SQL INSERT data into the peri
 medium, sample group, study and technique) meta tables.
 
  * README.md - This README.md
+ * ingestPfasSamples.py - ingest samples and related IDs from PODM peripheral tables into the podm_sample table
+ * ingestCommands.sh - examples of how to run ingestPfasSamples.py
  * copy:
    * data_copy_landing.sql - copy commands for ingest into the landing data tables
    * data_copy_landing_location.sql - copy command for ingest into the landing location table
