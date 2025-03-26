@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS podm_ntar_data (
     data_id SERIAL PRIMARY KEY,
-    sample_id VARCHAR(30),
+    sample_id VARCHAR(100),
     pfas_short_name VARCHAR(25),
     pfas_long_name VARCHAR(120),
     flags VARCHAR(15),
