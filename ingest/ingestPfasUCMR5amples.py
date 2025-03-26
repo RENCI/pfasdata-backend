@@ -40,25 +40,14 @@ def insertSample(studyId,techniqueId,mediumId):
                              password=os.environ['SQL_PASSWORD'],
                              autocommit=True) as conn:
             cur = conn.cursor()
-
-            # Get study name and sample year from the podm_study table.
-            cur.execute(sql.SQL("""SELECT study, year
-                                   FROM podm_study
-                                   WHERE study_id = %s"""),
-                                   [studyId])
-            
-            value = cur.fetchall()
-            study = value[0][0]
-            sampleyear = int(value[0][1])
             
             # Run query
             cur.execute(sql.SQL("""INSERT INTO podm_sample(sample_id, study_id, group_id, medium_id, 
-                                                           location_id, technique_id)
-                                       SELECT usgs.id, %s, %s, %s, pl.location_id, %s
-                                       FROM podm_pfas_in_tapwater_usgs usgs
-                                       INNER JOIN podm_location pl ON pl.site_id=usgs.station_na
-                                       WHERE usgs.study = %s AND usgs.sampleyear = %s"""),
-                                       [studyId, -9, mediumId, techniqueId, study, sampleyear])
+                                                           location_id, technique_id, date)
+                                       SELECT ucmr5.unique_id, %s, %s, %s, pl.location_id, %s, ucmr5.date
+                                       FROM landing_usmr5_data ucmr5
+                                       INNER JOIN podm_location pl ON pl.site_id=ucmr5.pwsid"""),
+                                       [studyId, -9, mediumId, techniqueId])
                 
             # Close cursor and database connection
             cur.close()
@@ -68,12 +57,12 @@ def insertSample(studyId,techniqueId,mediumId):
     except (Exception, psycopg.DatabaseError) as error:
         print(error)
 	
-def getStudyId(pi):
+def getStudyId(study):
     ''' This function queries the podm_study table for a study_id
         related to a study and pi
         Parameters
-            pi: string
-                A PI (USGS)
+            study: string
+                A study (UCMR5)
         Returns
             A study_id value
     '''
@@ -89,8 +78,8 @@ def getStudyId(pi):
 
             # Run query
             cur.execute("""SELECT study_id FROM podm_study
-                           WHERE pi = %(pi)s""",
-                        {'pi':pi})
+                           WHERE study = %(study)s""",
+                        {'study':study})
 
             # Fetch value
             value = cur.fetchall()
@@ -100,7 +89,7 @@ def getStudyId(pi):
             conn.close()
 
             # return Value
-            return(value)
+            return(value[0][0])
 
     # If exception log error
     except (Exception, psycopg.DatabaseError) as error:
@@ -182,12 +171,12 @@ def getTechniqueId(measurement):
     except (Exception, psycopg.DatabaseError) as error:
         print(error)
 	
-def ingestSample(pi,measurement,medium):
+def ingestSample(study,measurement,medium):
     ''' This function inserts IDs into the podm_sample table which are then used to create
         a view with the other tables in the PFAS Observation Data Model
         Parameters
-            pi: string
-                The name of the PI associated with the data (e.g. HUD, EPA)
+            study: string
+                The name of the study associated with the data (e.g. UCMR%, AHHS)
             measurement: string
                 The measurement associated with the data (e.g. Water Sample, Dust Sample, Serum Sample)
             medium: string
@@ -197,7 +186,7 @@ def ingestSample(pi,measurement,medium):
     '''
 
     # Run the function getStudyId() to get the studyId
-    studyIds = getStudyId(pi)
+    studyId = getStudyId(study)
 
     # Run the function getTechniqueId() to get the techniqueId
     techniqueId = getTechniqueId(measurement)
@@ -206,8 +195,7 @@ def ingestSample(pi,measurement,medium):
     mediumId = getMediumId(medium)
 
     # Insert ID's into the podm_sample table. 
-    for studyId in studyIds:
-        insertSample(studyId[0],techniqueId,mediumId)
+    insertSample(studyId,techniqueId,mediumId)
 
 def main(args):
     ''' Main program function takes args as input and runs specified task.
@@ -219,19 +207,19 @@ def main(args):
     '''
 
     # Get input arguments
-    pi = args.pi
+    study = args.study
     measurement = args.measurement
     medium = args.medium
 
     # Run the ingestSample() function
-    ingestSample(pi,measurement,medium)
+    ingestSample(study,measurement,medium)
 
 # Run main function 
 if __name__ == "__main__":
     ''' Takes argparse inputs and passes theme to the main function
         Parameters
-            pi: string
-                "The name of the PI. 
+            study: string
+                "The name of the study. 
             measurement: string
                 The type of measurement.
             medium: string
@@ -244,7 +232,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     # None optional argument
-    parser.add_argument("--pi", help="The name of the PI", action="store", dest="pi", required=True)
+    parser.add_argument("--study", help="The name of the study", action="store", dest="study", required=True)
     parser.add_argument("--measurement", help="The type of measurement", action="store", dest="measurement", required=True)
     parser.add_argument("--medium", help="The type of medium", action="store", dest="medium", required=True)
 

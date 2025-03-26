@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS podm_location (
     city VARCHAR(200),
     state VARCHAR(2),
     zipcode VARCHAR(7),
-    station VARCHAR(80),
+    site_id VARCHAR(80),
     site_type VARCHAR(20,
     detects INT,
     sum NUMERIC, 

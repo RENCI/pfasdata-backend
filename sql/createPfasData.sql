@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS podm_pfas_data (
     data_id SERIAL PRIMARY KEY,
-    sample_id VARCHAR(30),
+    sample_id VARCHAR(100),
     pfna_concentration NUMERIC,
     pfna_mrl NUMERIC,
     pfna_dl NUMERIC,
