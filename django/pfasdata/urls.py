@@ -22,7 +22,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('podm/', include(('podm.urls', 'podm'), 'podm')),
+    # path('podm/', include(('podm.urls', 'podm'), 'podm')),
+    path('podm/', include('podm.urls')),
     path('podm/api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('podm/api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('podm/api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),

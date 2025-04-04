@@ -66,5 +66,5 @@ class podm_ntar_sample_data_View(viewsets.ModelViewSet):
     queryset = ntar_sample_data.objects.all() 
     serializer_class = ntar_sample_data_Serializer 
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filter_fields = ['sample_id', 'study', 'date', 'year', 'pi', 'units', 'medium', 'city', 'state', 'zipcode', 'site_id', 'site_type', 'latitude', 'longitude', 'sample_detects', 'sample_sum', 'pfas_short_name', 'pfas_long_name', 'flags', 'measurement']
+    filter_fields = ['sample_id', 'study', 'date', 'year', 'pi', 'units', 'medium', 'city', 'state', 'zipcode', 'site_id', 'site_type', 'latitude', 'longitude', 'sample_detects', 'sample_sum', 'pfas_short_name', 'pfas_long_name', 'mrl', 'flags', 'measurement']
     ordering_fields = ['city', 'state', 'site_id', 'site_type', 'latitude', 'longitude']

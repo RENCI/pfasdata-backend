@@ -18,6 +18,7 @@ SELECT sa.id AS id,
        l.sum AS sample_sum,
        d.pfas_short_name AS pfas_short_name,
        d.pfas_long_name AS pfas_long_name,
+       d.mrl AS mrl,
        d.flags AS flags,
        d.measurement AS measurement
 FROM podm_sample sa

@@ -172,6 +172,7 @@ class ntar_sample_data(models.Model):
     sample_sum = models.FloatField()
     pfas_short_name = models.CharField(max_length=25,null=False)
     pfas_long_name = models.CharField(max_length=120,null=False)
+    mrl = models.FloatField()
     flags = models.CharField(max_length=15,null=False)
     measurement = models.FloatField()
 

@@ -3,10 +3,12 @@ The Python scripts in this directory where used in processing the intermediate d
 Microsoft Teams OneDrive. The processing involves changes that enabled the data to be ingested into the
 PFAS Observation Data Model.
 
- * processNonTargeted.py - This script converts the non targeted data to the column form:
+ * processAHHS_NonTargeted.py - This script converts the non targeted data to the column form:
    - sample_id,short_name,long_name,flags,measurement.
    - Below is an example of how to run this script:
-     * python processNonTargeted.py --inPath /PATH/TO/bin_data/Bin_processed_data/ingest/ --outPath /PATH/TO/dataIngest/csv_files/ --inFile AHHSNontargetedDatasetWater_Column.csv
+     * python processAHHS_NonTargeted.py --inPath /PATH/TO/bin_data/Bin_processed_data/ingest/ --outPath /PATH/TO/dataIngest/csv_files/ --inFile AHHSNontargetedDatasetWater_Column.csv --outFile AHHSNontargetedDatasetWater_OPAL.csv
+     * python processUSGS_NonTargeted.py --inPath /PATH/TO/bin_data/Bin_processed_data/ingest/ --outPath /PATH/TO/dataIngest/csv_files/ --inFile nontargetedUSGS.csv --outFile USGSNontargeted_OPAL.csv
+     * python processUCMR5_NonTargeted.py --inPath /PATH/TO/bin_data/Bin_processed_data/ingest/ --outPath /PATH/TO/dataIngest/csv_files/ --inFile nontargetedUCMR5.csv --outFile UCMR5Nontargeted_OPAL.csv
      * where --inPath is the path to the original data, --outPath is the path to the file output by this script, and --inFile is the name of the ogiginal data file.
  * createGeom.py - This script uses existing longitude and latitude values to create Well Know Binary (WKB) values for use the Django REST Framework (DRF) GIS.
    - Below is an example of how to run this script:
