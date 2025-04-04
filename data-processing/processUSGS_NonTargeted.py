@@ -23,6 +23,7 @@ def main(args):
    
     # Read original non targeted data file 
     dfOrg = pd.read_csv(inPath+inFile)
+    dfOrg['sample_id'] = dfOrg['sample_id'].astype(str)
 
     # exract column names
     columns = list(dfOrg.columns)
