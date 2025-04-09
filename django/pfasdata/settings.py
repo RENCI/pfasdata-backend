@@ -100,6 +100,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
 ]
 
+CORS_PREFLIGHT_MAX_AGE = 86400
+
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = ['https://pfas-db-dev.mdc.renci.unc.edu']
