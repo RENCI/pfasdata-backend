@@ -1,5 +1,5 @@
 # pfasdata-backend 
-his repository contains the software for creating a Django Rest Framework application that serves PFAS data from postgresql/postgis database.
+This repository contains the software for creating a Django Rest Framework application that serves PFAS data from postgresql/postgis database.
 
 # Installation 
 
