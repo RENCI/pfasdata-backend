@@ -1,4 +1,4 @@
-CREATE or REPLACE VIEW  podm_ntar_sample_data AS
+CREATE MATERIALIZED VIEW  podm_ntar_sample_data AS
 SELECT sa.id AS id,
        sa.sample_id AS sample_id,
        st.study AS study,

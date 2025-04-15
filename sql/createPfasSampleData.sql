@@ -1,4 +1,4 @@
-CREATE or REPLACE VIEW podm_pfas_sample_data AS
+CREATE MATERIALIZED VIEW podm_pfas_sample_data AS
 SELECT sa.id AS id,
        sa.sample_id AS sample_id,
        sg.group_id AS group_id, 
