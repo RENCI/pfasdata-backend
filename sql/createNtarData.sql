@@ -7,3 +7,6 @@ CREATE TABLE IF NOT EXISTS podm_ntar_data (
     flags VARCHAR(15),
     measurement NUMERIC
 );
+
+CREATE INDEX IF NOT EXISTS ntar_data_sample_id_index
+ON podm_ntar_data(sample_id);

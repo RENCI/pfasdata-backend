@@ -66,3 +66,6 @@ CREATE TABLE IF NOT EXISTS podm_pfas_data (
     pfda_dl NUMERIC,
     pfda_flags VARCHAR(6)
 );
+
+CREATE INDEX IF NOT EXISTS pfas_data_sample_id_index
+ON podm_pfas_data(sample_id);
