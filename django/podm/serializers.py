@@ -31,5 +31,5 @@ class ntar_sample_data_Serializer(QueryFieldsMixin, ModelSerializer):
     class Meta:
         model = ntar_sample_data
         id_field = 'id'
-        fields = ('id', 'sample_id', 'study', 'year', 'date', 'pi', 'units', 'medium', 'city', 'state', 'zipcode', 'site_id', 'site_type', 'latitude', 'longitude', 'sample_detects', 'sample_sum', 'pfas_short_name', 'pfas_long_name', 'mrl', 'flags', 'measurement')
+        fields = ('id', 'sample_id', 'study', 'year', 'date', 'pi', 'units', 'medium', 'city', 'state', 'zipcode', 'site_id', 'site_type', 'latitude', 'longitude', 'sample_detects', 'sample_sum', 'pfas_short_name', 'pfas_long_name', 'flags', 'measurement')
 
