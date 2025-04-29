@@ -1,6 +1,6 @@
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from rest_framework.serializers import ModelSerializer
-from .models import pfas_name_classification_info, pfas_in_tapwater_usgs, pfas_sample_data, ntar_sample_data
+from .models import pfas_name_classification_info, pfas_in_tapwater_usgs, pfas_sample_data, pfas_sample_data2, ntar_sample_data
 from drf_queryfields import QueryFieldsMixin
 
 # Serializer, with GeoFeatureModelSerializer, for tables for the gauge_station_source_data model view.
@@ -26,6 +26,12 @@ class pfas_sample_data_Serializer(QueryFieldsMixin, ModelSerializer):
         model = pfas_sample_data
         id_field = 'id'
         fields = ('id', 'sample_id', 'group_id', 'study', 'date', 'year', 'pi', 'units', 'medium', 'city', 'state', 'zipcode', 'site_id', 'site_type', 'latitude', 'longitude', 'sample_detects', 'sample_sum', 'pfna_concentration','pfna_mrl','pfna_dl','pfna_flags','pfds_concentration','pfds_mrl','pfds_dl','pfds_flags','pfhxa_concentration','pfhxa_mrl','pfhxa_dl','pfhxa_flags','pfoa_concentration','pfoa_mrl','pfoa_dl','pfoa_flags','pfos_concentration','pfos_mrl','pfos_dl','pfos_flags','pfba_concentration','pfba_mrl','pfba_dl','pfba_flags','pfdoa_concentration','pfdoa_mrl','pfdoa_dl','pfdoa_flags','pfpea_concentration','pfpea_mrl','pfpea_dl','pfpea_flags','pfhps_concentration','pfhps_mrl','pfhps_dl','pfhps_flags','pfunda_concentration','pfunda_mrl','pfunda_dl','pfunda_flags','pfbs_concentration','pfbs_mrl','pfbs_dl','pfbs_flags','pfpes_concentration','pfpes_mrl','pfpes_dl','pfpes_flags','pfns_concentration','pfns_mrl','pfns_dl','pfns_flags','pfhpa_concentration','pfhpa_mrl','pfhpa_dl','pfhpa_flags','pfhxs_concentration','pfhxs_mrl','pfhxs_dl','pfhxs_flags','pfda_concentration','pfda_mrl','pfda_dl','pfda_flags')
+
+class pfas_sample_data2_Serializer(QueryFieldsMixin, ModelSerializer):
+    class Meta:
+        model = pfas_sample_data2
+        id_field = 'id'
+        fields = ('id', 'sample_id', 'study', 'date', 'year', 'pi', 'units', 'medium', 'site_id', 'site_type', 'latitude', 'longitude', 'sample_detects', 'sample_sum', 'pfmpa_concentration', 'pfmpa_mrl', 'pfmba_concentration', 'pfmba_mrl', 'pfta_concentration', 'pfta_mrl', 'netfosaa_concentration', 'netfosaa_mrl', 'x82fts_concentration', 'x82fts_mrl', 'hfpoda_concentration', 'hfpoda_mrl', 'x62ft_concentration', 'x62ft_mrl', 'nfdha_concentration', 'nfdha_mrl', 'pfuna_concentration', 'pfuna_mrl', 'pfeesa_concentration', 'pfeesa_mrl', 'nmefosaa_concentration', 'nmefosaa_mrl', 'x9clpf3ons_concentration', 'x9clpf3ons_mrl', 'x11clpf3ouds_concentration', 'x11clpf3ouds_mrl', 'adona_concentration', 'adona_mrl', 'x42fts_concentration', 'x42fts_mrl', 'pftrda_concentration', 'pftrda_mrl', 'genx_concentration', 'fosa_concentration', 'f6_2fts_concentration', 'pfprs_concentration')
 
 class ntar_sample_data_Serializer(QueryFieldsMixin, ModelSerializer):
     class Meta:
