@@ -1,5 +1,5 @@
-# pfasdata-backend 
-This repository contains the software for creating a Django Rest Framework application that serves PFAS data from postgresql/postgis database.
+# opal-backend 
+This repository is part of OPAL (Observational PFAS Access paneL), and it contains the software for creating a Django Rest Framework application that serves PFAS data from postgresql/postgis database.
 
 # Installation 
 
@@ -125,7 +125,7 @@ too access data from the API using a JSON web token (JWT).
 ### Create non managed DB tables
 
 The tables in the PFAS Observation Data Model (PODM) are not managed by Django, so they are not created with "python manage.py migrate" 
-is run. They need to be created by running the SQL files in the SQL directory (pfasdata-backend/sql) of the Repo. The 
+is run. They need to be created by running the SQL files in the SQL directory (opal-backend/sql) of the Repo. The 
 createTablesView.sh file should be modified changing the PGPASSWORD to the one you use for your DB and then run to create these 
 tables:
 
@@ -133,7 +133,7 @@ tables:
 
 After the tables have been created run the following shell command:
 
- * ./insertPfasMetaData.sh - you need to be in the pfasdata-backend/ingest/insert when you run this command
+ * ./insertPfasMetaData.sh - you need to be in the opal-backend/ingest/insert when you run this command
 
 The shell script insertPfasMetaData.sh will ingest the meta data for the peripheral tables (location, medium, sample group, 
 study and technique) in PODM.
@@ -141,7 +141,7 @@ study and technique) in PODM.
 After that data has been ingested move all the PFAS CSV data files to the directory that you declared in the docker-compose.yml. 
 Then run the following shell command:
 
- * ./psql_pfasdata_copy.sh - you need to be in the pfasdata-backend/ingest/copy when you run this command
+ * ./psql_pfasdata_copy.sh - you need to be in the opal-backend/ingest/copy when you run this command
 
 This will ingest all of the CSV data files into the landing, non-targeted, targeted, sample groups and PFAS naming 
 classification table.
@@ -160,7 +160,7 @@ To run ingestPfasSamples.py the following Python module need to be installed:
 
 # Create backup of DB using cronjob:
 
-The directory /pfasdata-backend/dbbackup, in this repo, contains files used to setup and run backups with a cronjob. 
+The directory /opal-backend/dbbackup, in this repo, contains files used to setup and run backups with a cronjob. 
 These files are:
 
  - pd_backup_rotated.sh the script that creates rotating backups. This script is currently setup to for five day (removes sixth day) rotating backups. 
