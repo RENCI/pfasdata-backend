@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from rest_framework import viewsets, status
 #from rest_framework.generics import ListAPIView
+#from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -11,10 +12,11 @@ from rest_framework_gis.filters import InBBoxFilter, DistanceToPointFilter, Dist
 from rest_framework.filters import OrderingFilter
 from rest_framework.decorators import action
 from url_filter.integrations.drf import DjangoFilterBackend
-from .serializers import pfas_name_classification_info_Serializer, pfas_in_tapwater_usgs_Serializer, pfas_sample_data_Serializer, pfas_sample_data2_Serializer, ntar_sample_data_Serializer
-from .models import pfas_name_classification_info, pfas_in_tapwater_usgs, pfas_sample_data, pfas_sample_data2, ntar_sample_data
+from .serializers import pfas_name_classification_info_Serializer, pfas_in_tapwater_usgs_Serializer, pfas_sample_data_Serializer, pfas_sample_data2_Serializer, ntar_sample_data_Serializer, pfas_sites_distance_from_npl_Serializer
+from .models import pfas_name_classification_info, pfas_in_tapwater_usgs, pfas_sample_data, pfas_sample_data2, ntar_sample_data, pfas_sites_distance_from_npl
 from rest_framework.pagination import PageNumberPagination
 from rest_framework_gis.pagination import GeoJsonPagination
+from django.db import connection
 
 # Change page size dynamically by by using the psize variable in the URL
 class CustomPageNumberPagination(PageNumberPagination):
@@ -79,3 +81,42 @@ class podm_ntar_sample_data_View(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filter_fields = ['sample_id', 'study', 'date', 'year', 'pi', 'medium', 'city', 'state', 'zipcode', 'site_id', 'site_type', 'latitude', 'longitude', 'sample_detects', 'sample_sum', 'pfas_short_name', 'pfas_long_name', 'flags', 'measurement']
     ordering_fields = ['city', 'state', 'site_id', 'site_type', 'latitude', 'longitude']
+
+class pfas_sites_distance_from_npl_View(viewsets.ModelViewSet):
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
+
+    queryset = pfas_sites_distance_from_npl.objects.all()
+    serializer_class = pfas_sites_distance_from_npl_Serializer
+
+    @action(detail=True, methods=['get'], url_path='get-distance')
+    def get_distance(self, request, pk=None):
+        # 'pk' will contain the value of the path parameter (e.g., the object's ID)
+        # if the action is detail=True.
+        # For other path parameters defined in url_path, they will be in self.kwargs.
+
+        # Example: Accessing a path parameter (e.g., 'pk' for a detail action)
+        variables = self.kwargs.get('pk').split('&')
+        miles = int(variables[0].split('=')[1])
+        pi = variables[1].split('=')[1]
+
+        # Custom Query
+        sql_query = "SELECT sample_id AS pfas_sample_id, %s AS miles, study, pi, units, medium, pfas_samples.latitude AS pfas_latitude, pfas_samples.longitude AS pfas_longitude, " \
+                            "npl.ogc_fid AS ogc_fid, npl.site_name as npl_site_name, npl.site_score AS npl_site_score, npl.latitude AS npd_latitude, npl.longitude AS npl_longitude " \
+                    "FROM opal_pfas_sample_data_albers pfas_samples " \
+                    "JOIN superfund_albers_national_priorities_list npl ON ST_DWithin(pfas_samples.geom::geometry, npl.wkb_geometry::geometry, %s * 1609.34) " \
+                    "WHERE pi = %s AND geom IS NOT NULL"
+
+        # Constructing and executing a raw SQL query
+        if miles is not None:
+            with connection.cursor() as cursor:
+                # Use a parameterized query to prevent SQL injection
+                cursor.execute(sql_query, [miles, miles, pi])
+                columns = [col[0] for col in cursor.description]
+                results = [
+                    dict(zip(columns, row))
+                    for row in cursor.fetchall()
+                ]
+            return Response(results, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Object ID not provided'}, status=status.HTTP_400_BAD_REQUEST)

@@ -26,6 +26,7 @@ router.register(r'pfas_in_tapwater_usgs', views.podm_pfas_in_tapwater_usgs_View,
 router.register(r'pfas_sample_data', views.podm_pfas_sample_data_View, 'pfas_sample_data')
 router.register(r'pfas_sample_data2', views.podm_pfas_sample_data2_View, 'pfas_sample_data2')
 router.register(r'ntar_sample_data', views.podm_ntar_sample_data_View, 'ntar_sample_data')
+router.register(r'distance_from_npl', views.pfas_sites_distance_from_npl_View, basename='distance_from_npl')
 
 urlpatterns = [
     path("api/", include(router.urls)),

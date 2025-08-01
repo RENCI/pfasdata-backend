@@ -233,3 +233,21 @@ class ntar_sample_data(models.Model):
     class Meta:
         managed = False
         db_table = "podm_ntar_sample_data"
+
+class pfas_sites_distance_from_npl(models.Model):
+    pfas_sample_id = models.CharField(max_length=100,null=False,primary_key=True)
+    study = models.CharField(max_length=100,null=True)
+    miles = models.IntegerField(blank=True, null=True)
+    pi = models.CharField(max_length=50,null=False)
+    units = models.CharField(max_length=20,null=True)
+    medium = models.CharField(max_length=20,null=True)
+    pfas_longitude = models.FloatField()
+    pfas_latitude = models.FloatField()
+    ogc_fid = models.IntegerField(blank=True, null=True)
+    npl_site_name = models.CharField(max_length=300,null=True)
+    npl_latitude = models.FloatField()
+    npl_longitude = models.FloatField()
+
+    class Meta: 
+        managed = False
+        db_table = "pfas_sites_distance_from_npl"

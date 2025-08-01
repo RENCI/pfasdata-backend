@@ -1,6 +1,6 @@
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from rest_framework.serializers import ModelSerializer
-from .models import pfas_name_classification_info, pfas_in_tapwater_usgs, pfas_sample_data, pfas_sample_data2, ntar_sample_data
+from .models import pfas_name_classification_info, pfas_in_tapwater_usgs, pfas_sample_data, pfas_sample_data2, ntar_sample_data, pfas_sites_distance_from_npl
 from drf_queryfields import QueryFieldsMixin
 
 # Serializer, with GeoFeatureModelSerializer, for tables for the gauge_station_source_data model view.
@@ -38,4 +38,11 @@ class ntar_sample_data_Serializer(QueryFieldsMixin, ModelSerializer):
         model = ntar_sample_data
         id_field = 'id'
         fields = ('id', 'sample_id', 'study', 'year', 'date', 'pi', 'medium', 'city', 'state', 'zipcode', 'site_id', 'site_type', 'latitude', 'longitude', 'sample_detects', 'sample_sum', 'pfas_short_name', 'pfas_long_name', 'flags', 'measurement')
+
+class pfas_sites_distance_from_npl_Serializer(ModelSerializer):
+    class Meta:
+        model = pfas_sites_distance_from_npl
+        id_field = 'pfas_sample_id'
+        fields = ('pfas_sample_id','study','miles','pi','units','medium','pfas_longitude','pfas_latitude','ogc_fid','npl_site_name','npl_latitude','npl_longitude')
+
 
