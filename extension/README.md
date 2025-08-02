@@ -23,10 +23,13 @@ Specific Task That Need to be Completed:
 
 Ingest the NPL data:
     Data:
-    /projects/pfas/data/Superfund_National_Priorities_List_NPL_Sites_with_Status_Information_Albers.geojson
+    /projects/pfas/data/superfund_albers_national_priorities_list.csv
 
-    Import data method:
-    opal-backend/extension/importNPL-GeoJson.sh
+    Create Table:
+    opal-backend/extension/createNPL.sql
+
+    Copy data to table:
+    opal-backend/extension/data_copy_NPL.sql
 
 Ingest the ZCTA 2020 Centroids Data:
     Data:
@@ -42,6 +45,7 @@ Ingest the ZCTA 2020 Centroids Data:
 Create opal_albers_location table:
     Run commands in:
     opal-backend/extension/createOPAL_AlbersLocation.sql 
+    opal-backend/extension/createPfasPrimarySampleDataAlbers.sql
 
 Create pfas_sites_distance_from_npl dumy table:
     Run command in:
