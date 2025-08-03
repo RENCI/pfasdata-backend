@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 from rest_framework import viewsets, status
 #from rest_framework.generics import ListAPIView
-#from rest_framework.views import APIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -83,8 +83,8 @@ class podm_ntar_sample_data_View(viewsets.ModelViewSet):
     ordering_fields = ['city', 'state', 'site_id', 'site_type', 'latitude', 'longitude']
 
 class pfas_sites_distance_from_npl_View(viewsets.ModelViewSet):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    #authentication_classes = [JWTAuthentication]
+    #permission_classes = [IsAuthenticated]
 
     queryset = pfas_sites_distance_from_npl.objects.all()
     serializer_class = pfas_sites_distance_from_npl_Serializer
@@ -97,26 +97,63 @@ class pfas_sites_distance_from_npl_View(viewsets.ModelViewSet):
 
         # Example: Accessing a path parameter (e.g., 'pk' for a detail action)
         variables = self.kwargs.get('pk').split('&')
-        miles = int(variables[0].split('=')[1])
-        pi = variables[1].split('=')[1]
+        if len(variables) == 3:
+            for variable in variables:
+                vparts = variable.split('=')
+                if vparts[0] == 'miles':
+                    miles = int(vparts[1])
+                elif vparts[0] == 'pi':
+                    pi = vparts[1]
+                elif vparts[0 == 'pfasb']:
+                    pfasb = vparts[1]
 
-        # Custom Query
-        sql_query = "SELECT sample_id AS pfas_sample_id, %s AS miles, study, pi, units, medium, pfas_samples.latitude AS pfas_latitude, pfas_samples.longitude AS pfas_longitude, " \
-                            "npl.ogc_fid AS ogc_fid, npl.site_name as npl_site_name, npl.site_score AS npl_site_score, npl.latitude AS npd_latitude, npl.longitude AS npl_longitude " \
-                    "FROM opal_pfas_sample_data_albers pfas_samples " \
-                    "JOIN superfund_albers_national_priorities_list npl ON ST_DWithin(pfas_samples.geom::geometry, npl.wkb_geometry::geometry, %s * 1609.34) " \
-                    "WHERE pi = %s AND geom IS NOT NULL"
+            # Custom Query
+            sql_query = "SELECT sample_id AS pfas_sample_id, %s AS miles, study, pi, units, medium, pfas_samples.latitude AS pfas_latitude, " \
+                                "pfas_samples.longitude AS pfas_longitude, npl.ogc_fid AS ogc_fid, npl.site_name as npl_site_name, " \
+                                "npl.site_score AS npl_site_score, npl.latitude AS npd_latitude, npl.longitude AS npl_longitude, pfas " \
+                        "FROM opal_pfas_sample_data_albers pfas_samples " \
+                        "JOIN superfund_albers_national_priorities_list npl ON ST_DWithin(pfas_samples.geom::geometry, npl.wkb_geometry::geometry, %s * 1609.34) " \
+                        "WHERE pi = %s AND pfas = %s AND geom IS NOT NULL"
 
-        # Constructing and executing a raw SQL query
-        if miles is not None:
-            with connection.cursor() as cursor:
-                # Use a parameterized query to prevent SQL injection
-                cursor.execute(sql_query, [miles, miles, pi])
-                columns = [col[0] for col in cursor.description]
-                results = [
-                    dict(zip(columns, row))
-                    for row in cursor.fetchall()
-                ]
-            return Response(results, status=status.HTTP_200_OK)
+            # Constructing and executing a raw SQL query
+            if miles is not None:
+                with connection.cursor() as cursor:
+                    # Use a parameterized query to prevent SQL injection
+                    cursor.execute(sql_query, [miles, miles, pi, pfasb])
+                    columns = [col[0] for col in cursor.description]
+                    results = [
+                        dict(zip(columns, row))
+                        for row in cursor.fetchall()
+                    ]
+                return Response(results, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Object ID not provided'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'error': 'Object ID not provided'}, status=status.HTTP_400_BAD_REQUEST)
+            for variable in variables:
+                vparts = variable.split('=')
+                if vparts[0] == 'miles':
+                    miles = int(vparts[1])
+                elif vparts[0] == 'pi':
+                    pi = vparts[1]
+
+            # Custom Query
+            sql_query = "SELECT sample_id AS pfas_sample_id, %s AS miles, study, pi, units, medium, pfas_samples.latitude AS pfas_latitude, " \
+                                "pfas_samples.longitude AS pfas_longitude, npl.ogc_fid AS ogc_fid, npl.site_name as npl_site_name, " \
+                                "npl.site_score AS npl_site_score, npl.latitude AS npd_latitude, npl.longitude AS npl_longitude " \
+                        "FROM opal_pfas_sample_data_albers pfas_samples " \
+                        "JOIN superfund_albers_national_priorities_list npl ON ST_DWithin(pfas_samples.geom::geometry, npl.wkb_geometry::geometry, %s * 1609.34) " \
+                        "WHERE pi = %s AND geom IS NOT NULL"
+
+            # Constructing and executing a raw SQL query
+            if miles is not None:
+                with connection.cursor() as cursor:
+                    # Use a parameterized query to prevent SQL injection
+                    cursor.execute(sql_query, [miles, miles, pi])
+                    columns = [col[0] for col in cursor.description]
+                    results = [
+                        dict(zip(columns, row))
+                        for row in cursor.fetchall()
+                    ]
+                return Response(results, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Object ID not provided'}, status=status.HTTP_400_BAD_REQUEST)
