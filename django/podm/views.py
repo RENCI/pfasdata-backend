@@ -104,7 +104,7 @@ class pfas_sites_distance_from_npl_View(viewsets.ModelViewSet):
                     miles = int(vparts[1])
                 elif vparts[0] == 'pi':
                     pi = vparts[1]
-                elif vparts[0 == 'pfasb']:
+                elif vparts[0] == 'pfasb':
                     pfasb = vparts[1]
 
             # Custom Query
