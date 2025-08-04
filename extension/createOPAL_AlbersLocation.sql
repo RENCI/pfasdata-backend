@@ -17,5 +17,5 @@ ALTER TABLE opal_albers_location ADD COLUMN geom geometry(Point, 102008);
 
 # Add geometry to opal_albers_location table
 UPDATE opal_albers_location 
-SET geom = ST_SetSRID(ST_MakePoint(longitude::double precision, latitude::double precision), 102008);
+SET geom = ST_Transform(ST_SetSRID(ST_MakePoint(longitude::double precision, latitude::double precision) 4326), 102008);
 
