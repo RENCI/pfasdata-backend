@@ -110,7 +110,7 @@ class pfas_sites_distance_from_npl_View(viewsets.ModelViewSet):
             # Custom Query
             sql_query = "SELECT sample_id AS pfas_sample_id, %s AS miles, study, pi, units, medium, pfas_samples.latitude AS pfas_latitude, " \
                                 "pfas_samples.longitude AS pfas_longitude, npl.ogc_fid AS ogc_fid, npl.site_name as npl_site_name, " \
-                                "npl.site_score AS npl_site_score, npl.latitude AS npd_latitude, npl.longitude AS npl_longitude, pfas " \
+                                "npl.site_score AS npl_site_score, npl.latitude AS npl_latitude, npl.longitude AS npl_longitude, pfas " \
                         "FROM opal_pfas_sample_data_albers pfas_samples " \
                         "JOIN superfund_albers_national_priorities_list npl ON ST_DWithin(pfas_samples.geom::geometry, npl.wkb_geometry::geometry, %s * 1609.34) " \
                         "WHERE pi = %s AND pfas = %s AND geom IS NOT NULL"
@@ -139,7 +139,7 @@ class pfas_sites_distance_from_npl_View(viewsets.ModelViewSet):
             # Custom Query
             sql_query = "SELECT sample_id AS pfas_sample_id, %s AS miles, study, pi, units, medium, pfas_samples.latitude AS pfas_latitude, " \
                                 "pfas_samples.longitude AS pfas_longitude, npl.ogc_fid AS ogc_fid, npl.site_name as npl_site_name, " \
-                                "npl.site_score AS npl_site_score, npl.latitude AS npd_latitude, npl.longitude AS npl_longitude " \
+                                "npl.site_score AS npl_site_score, npl.latitude AS npl_latitude, npl.longitude AS npl_longitude " \
                         "FROM opal_pfas_sample_data_albers pfas_samples " \
                         "JOIN superfund_albers_national_priorities_list npl ON ST_DWithin(pfas_samples.geom::geometry, npl.wkb_geometry::geometry, %s * 1609.34) " \
                         "WHERE pi = %s AND geom IS NOT NULL"
